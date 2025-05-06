@@ -1,9 +1,9 @@
-
 from langgraph.graph import StateGraph, END
 from langchain_core.runnables import RunnableLambda
 import pandas as pd
-import openai
+from openai import OpenAI
 
+client = OpenAI()
 State = dict
 
 def lease_analyzer_agent(state: State) -> State:
@@ -67,12 +67,11 @@ Based on:
 
 Write a 3-4 point strategic summary for executive stakeholders.
 """
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.5
+        messages=[{"role": "user", "content": prompt}]
     )
-    state["genai_summary"] = response.choices[0].message["content"]
+    state["genai_summary"] = response.choices[0].message.content
     return state
 
 def strategic_recommendation_agent(state: State) -> State:
@@ -90,12 +89,11 @@ Given:
 
 Recommend 3 actions to optimize asset value and reduce risk.
 """
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.7
+        messages=[{"role": "user", "content": prompt}]
     )
-    state["strategy_recommendation"] = response.choices[0].message["content"]
+    state["strategy_recommendation"] = response.choices[0].message.content
     return state
 
 def build_graph():

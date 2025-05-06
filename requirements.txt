@@ -3,3 +3,4 @@ openai
 langgraph
 langchain
 pandas
+tabulate
